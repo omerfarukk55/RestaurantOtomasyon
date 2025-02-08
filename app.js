@@ -1,10 +1,13 @@
+// app.js
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
 const { connectDB } = require('./config/database');
-require('dotenv').config();
+const errorHandler = require('./middleware/errorHandler');
+const requestLogger = require('./middleware/requestLogger');
+const config = require('./config/config');
 
 const app = express();
 
@@ -14,8 +17,9 @@ app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(requestLogger);
 
-// Statik dosya sunumu
+// Static dosyalar
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
@@ -24,11 +28,16 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
-app.use('/api/tables', require('./routes/tableRoutes'));
-app.use('/api/credit-book', require('./routes/creditBookRoutes'));
-app.use('/api/reservations', require('./routes/reservationRoutes'));
 
 // Error handling
-app.use(require('./middleware/errorHandler'));
+app.use(errorHandler);
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({
+        status: 'error',
+        message: 'Sayfa bulunamadı'
+    });
+});
 
 module.exports = app;
