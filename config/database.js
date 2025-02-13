@@ -2,14 +2,14 @@ const sql = require('mssql');
 require('dotenv').config();
 
 const config = {
-    server: 'localhost',
+    server: 'MONSTER',
     database: 'restaurant_db',
     options: {
         encrypt: false,
         trustServerCertificate: true,
         enableArithAbort: true,
-        trustedConnection: true, // Windows Authentication
-        integratedSecurity: true // Windows Authentication
+        trustedConnection: true,
+        integratedSecurity: true
     }
 };
 
