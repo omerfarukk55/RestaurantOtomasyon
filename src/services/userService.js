@@ -1,6 +1,6 @@
 // services/userService.js
 const { sql } = require('../../config/database');
-const { User } = require('../models');
+const  User  = require('../models/User');
 const logger = require('./loggerService');
 
 class UserService {

@@ -61,7 +61,23 @@ const creditBookController = {
             return ResponseHandler.error(res, error.message);
         }
     },
-
+    getAllCredits: async (req, res) => {
+        try {
+            const credits = await CreditBook.find();
+            res.status(200).json(credits);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+    createCredit: async (req, res) => {
+        try {
+            const newCredit = new CreditBook(req.body);
+            await newCredit.save();
+            res.status(201).json(newCredit);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
     getAllCustomers: async (req, res) => {
         try {
             const customers = await CreditBook.getAll(sql);

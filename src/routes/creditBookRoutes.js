@@ -1,7 +1,7 @@
 // routes/creditBookRoutes.js
 const express = require('express');
 const router = express.Router();
-const creditBookController = require('../controllers/creditBookController');
+const creditBookController = require('../controllers/creditBookContoller');
 const { isAdmin } = require('../middleware/auth');
 const { validateRequest } = require('../middleware/validator');
 const { body } = require('express-validator');
@@ -24,6 +24,17 @@ router.get('/customers', isAdmin, creditBookController.getAllCustomers);
 router.get('/customers/:id', isAdmin, creditBookController.getCustomerDetails);
 router.delete('/customers/:id', isAdmin, creditBookController.deleteCustomer);
 
+router.get('/credits', isAdmin, creditBookController.getAllCredits);
+router.post('/credits', async (req, res) => {
+    try {
+        // Veresiye ekleme işlemi
+        const { customerName, amount, description } = req.body;
+        // ... işlem kodları
+        res.status(201).json({ message: 'Veresiye kaydı oluşturuldu' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 // Excel export routes
 router.get('/export/:id', isAdmin, creditBookController.exportToExcel);
 router.get('/export-all', isAdmin, creditBookController.exportAllToExcel);

@@ -6,6 +6,8 @@ const { isAdmin, hasRole } = require('../middleware/auth');
 const { productUpload, processProductImage, handleUploadError } = require('../middleware/fileUpload');
 const { validateRequest } = require('../middleware/validator');
 const { body } = require('express-validator');
+const { getProductById } = require('../controllers/productController');
+const Product = require('../models/Product');
 
 // Validation rules
 const productValidation = {
@@ -63,7 +65,7 @@ router.delete('/:id', isAdmin, productController.deleteProduct);
 // Garson ve Kasiyer rotaları (Ürün görüntüleme)
 router.get('/', hasRole(['admin', 'cashier', 'waiter']), productController.getActiveProducts);
 router.get('/category/:categoryId', hasRole(['admin', 'cashier', 'waiter']), productController.getProductsByCategory);
-router.get('/:id', hasRole(['admin', 'cashier', 'waiter']), productController.getProductDetails);
+router.get('/products/:id', getProductById);
 
 // Hata yakalama
 router.use(handleUploadError);
